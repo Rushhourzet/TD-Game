@@ -2,7 +2,9 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public interface Gridable
+public class Player : MonoBehaviour
 {
-    void PlaceObjectOnGrid(GameObject go, int x, int y);
+    public Grid grid;
+    public Tower[] towers;
+
 }

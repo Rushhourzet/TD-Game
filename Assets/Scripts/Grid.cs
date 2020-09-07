@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -7,6 +8,9 @@ public class Grid : MonoBehaviour
     private GameObject[,] gridRegister;
     private const float CENTER_OFFSET = 0.5f;
     public FieldData fieldData;
+
+    private Func<GameObject, int, int, bool> addGameObjectToGridRegisterFunc => AddGameObjectToGridRegister;
+
     void InitGridRegister(CubeMeshGenerator meshGeneratorForDimensions) {
         int x = fieldData.height;
         int y = fieldData.width;
@@ -19,9 +23,10 @@ public class Grid : MonoBehaviour
     /// <param name="go"></param> The GameObject
     /// <param name="x"></param> The position on the x axis
     /// <param name="y"></param> The position on the y axis
-    public void PlaceGameObjectOnGrid(GameObject go, int x, int y) {
+    /// <param name="addGameObjectToGridRegisterFunc"></param> The function to add the gameObject to the GridRegister
+    public void PlaceGameObjectOnGrid(GameObject go, int x, int y, Func<GameObject, int, int, bool> addGameObjectToGridRegisterFunc) {
         Vector3 position = new Vector3(x + CENTER_OFFSET, fieldData.thickness, y + CENTER_OFFSET);
-        if (AddGameObjectToGridRegister(go, x, y)) 
+        if (addGameObjectToGridRegisterFunc(go, x, y)) 
             Instantiate(go, position, Quaternion.identity);
     }
 
@@ -31,7 +36,7 @@ public class Grid : MonoBehaviour
     /// <param name="go"></param> The GameObject
     /// <param name="x"></param> The position on the x axis
     /// <param name="y"></param> The position on the y axis
-    /// <returns></returns>
+    /// <returns> true if the object can be placed succesfully without being occupied/blocked </returns>
     public bool AddGameObjectToGridRegister(GameObject go, int x, int y) {
         if (CheckIfFieldEmpty(x, y)) {
             gridRegister[x, y] = go;
