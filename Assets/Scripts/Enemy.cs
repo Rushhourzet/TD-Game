@@ -2,8 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Player : MonoBehaviour
+public class Enemy : GridObject
 {
-    public Grid grid;
-    public Tower[] towers;
+
 }
